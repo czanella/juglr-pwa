@@ -1,0 +1,23 @@
+@import './fonts.scss';
+
+@font-face {
+    font-family: 'Roboto';
+    src: url(/static/fonts/Roboto-Bold-webfont.eot);
+    src: url(/static/fonts/Roboto-Bold-webfont.eot?#iefix) format('embedded-opentype'),
+         url(/static/fonts/Roboto-Bold-webfont.woff) format('woff'),
+         url(/static/fonts/Roboto-Bold-webfont.ttf) format('truetype'),
+         url(/static/fonts/Roboto-Bold-webfont.svg#Roboto) format('svg');
+    font-weight: $bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url(/static/fonts/Roboto-Regular-webfont.eot);
+    src: url(/static/fonts/Roboto-Regular-webfont.eot?#iefix) format('embedded-opentype'),
+         url(/static/fonts/Roboto-Regular-webfont.woff) format('woff'),
+         url(/static/fonts/Roboto-Regular-webfont.ttf) format('truetype'),
+         url(/static/fonts/Roboto-Regular-webfont.svg#Roboto) format('svg');
+    font-weight: $regular;
+    font-style: normal;
+}
