@@ -1,5 +1,3 @@
-@import './fonts.scss';
-
 @font-face {
     font-family: 'Pixellari';
     src: url(/static/fonts/Pixellari.eot);
@@ -7,6 +5,7 @@
         url(/static/fonts/Pixellari.woff) format('woff'),
         url(/static/fonts/Pixellari.ttf) format('truetype'),
         url(/static/fonts/Pixellari.svg#Pixellari) format('svg');
-    font-weight: $medium;
+    font-weight: 500;
     font-style: normal;
 }
+
