@@ -1,0 +1,7 @@
+@mixin textStroke($color, $width) {
+    text-shadow:
+        -$width -$width 0 $color,
+        $width -$width 0 $color,
+        -$width $width 0 $color,
+        $width $width 0 $color;
+}
