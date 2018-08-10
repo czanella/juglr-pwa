@@ -13,7 +13,7 @@ function App() {
             <Helmet>
                 <title>Juglr</title>
             </Helmet>
-            <Route exact path={'/'} component={Home} />
+            <Home />
         </div>
     );
 }
