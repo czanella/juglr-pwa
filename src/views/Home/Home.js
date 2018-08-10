@@ -30,7 +30,7 @@ class Home extends Component {
         return (
             <div className={styles.home}>
                 <img src={logo} className={styles.logo} alt={'Juglr'} />
-                <OutlineText size={40} strokeWidth={5}>
+                <OutlineText size={40} strokeWidth={4}>
                     {count.toString()}
                 </OutlineText>
             </div>
