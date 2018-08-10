@@ -28,12 +28,7 @@ class OutlineText extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        const { children: prevChildren } = prevProps;
-        const { children } = this.props;
-
-        if (prevChildren !== children) {
-            this.renderText();
-        }
+        this.renderText();
     }
 
     renderText() {
