@@ -32,7 +32,7 @@ $spacing: 20px;
             flex: 1;
         }
 
-        & > *:first-child {
+        :first-child {
             margin-right: $spacing;
         }
     }
@@ -40,4 +40,20 @@ $spacing: 20px;
     button {
         height: 0.2 * 61.6vw;
     }
+}
+
+.play {
+    background-image: url(./play.png);
+}
+
+.question {
+    background-image: url(./question.png);
+}
+
+.soundOn {
+    background-image: url(./soundOn.png);
+}
+
+.soundOff {
+    background-image: url(./soundOff.png);
 }
