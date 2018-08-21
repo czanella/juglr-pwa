@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import logo from './logo.png';
+import HomeButton from '../../components/HomeButton';
 import playButton from './playButton.png';
 import soundButton from './soundButton.png';
 import aboutButton from './aboutButton.png';
@@ -16,9 +17,18 @@ class Home extends Component {
             <div className={styles.home}>
                 <img src={logo} className={styles.logo} alt={'Juglr'} />
                 <div className={styles.buttons}>
-                    <img src={playButton} className={styles.play} alt={'Play'} />
-                    <img src={soundButton} className={styles.sound} alt={'Sound'} />
-                    <img src={aboutButton} className={styles.about} alt={'About'} />
+                    <HomeButton>
+                        Play
+                    </HomeButton>
+                    <div className={styles.buttonRow}>
+                        <HomeButton>
+                            !
+                        </HomeButton>
+                        <HomeButton>
+                            ?
+                        </HomeButton>
+                    </div>
+
                 </div>
             </div>
         );
