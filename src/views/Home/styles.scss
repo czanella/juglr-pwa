@@ -32,7 +32,7 @@ $spacing: 20px;
             flex: 1;
         }
 
-        *:first-child {
+        & > *:first-child {
             margin-right: $spacing;
         }
     }

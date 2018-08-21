@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import logo from './logo.png';
 import HomeButton from '../../components/HomeButton';
-import playButton from './playButton.png';
-import soundButton from './soundButton.png';
-import aboutButton from './aboutButton.png';
+import soundOn from './soundOn.png';
+import soundOff from './soundOff.png';
 
 import styles from './styles.scss';
 
@@ -22,7 +21,7 @@ class Home extends Component {
                     </HomeButton>
                     <div className={styles.buttonRow}>
                         <HomeButton>
-                            !
+                            <img src={soundOn} />
                         </HomeButton>
                         <HomeButton>
                             ?

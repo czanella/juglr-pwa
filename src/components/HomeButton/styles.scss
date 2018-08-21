@@ -21,11 +21,15 @@
         text-transform: uppercase;
         text-align: center;
         background-color: $red;
-        padding: 11px 0px;
+        padding: 4px 0px;
         text-shadow:
         -1px -1px 0 $black,  
          1px -1px 0 $black,
          -1px 1px 0 $black,
           1px 1px 0 $black;
+
+        img {
+            height: 100%;
+        }
     }
 }
