@@ -50,7 +50,7 @@ class App extends Component {
                 <Helmet>
                     <title>Juglr</title>
                 </Helmet>
-                <Home />
+                <Route exact path={'/'} component={Home} />
             </div>
         );
     }

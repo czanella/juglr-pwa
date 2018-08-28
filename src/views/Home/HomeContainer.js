@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import Home from './Home';
 import { setSound as setSoundAction } from '../../redux/actions';
 
@@ -8,10 +9,11 @@ const mapStateToProps = (state) => {
     return { soundOn };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, { history }) => {
     const setSound = state => dispatch(setSoundAction(state));
+    const navigate = to => history.push(to);
 
-    return { setSound };
+    return { setSound, navigate };
 };
 
 const HomeContainer = connect(
@@ -19,4 +21,4 @@ const HomeContainer = connect(
     mapDispatchToProps,
 )(Home);
 
-export default HomeContainer;
+export default withRouter(HomeContainer);

@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import App from './App';
 import { setDimensions as setDimensionsAction } from '../redux/actions';
 
@@ -14,9 +15,9 @@ const mapDispatchToProps = (dispatch) => {
     return { setDimensions };
 };
 
-const AppContainer = connect(
+const AppContainer = withRouter(connect(
     mapStateToProps,
     mapDispatchToProps,
-)(App);
+)(App));
 
 export default AppContainer;

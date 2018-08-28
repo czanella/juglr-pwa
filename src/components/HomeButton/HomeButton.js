@@ -1,5 +1,5 @@
 import React, { Component, createRef } from 'react';
-import { func, any, string } from 'prop-types';
+import { func, any, string, object } from 'prop-types';
 
 import styles from './styles.scss';
 
@@ -7,6 +7,7 @@ const propTypes = {
     children: any,
     onClick: func,
     className: string,
+    style: object,
 };
 
 const defaultProps = {
@@ -25,6 +26,7 @@ class HomeButton extends Component {
 
     render() {
         const { children, onClick, className } = this.props;
+
         return (
             <button
                 className={styles.homeButton}

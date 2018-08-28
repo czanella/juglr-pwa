@@ -10,6 +10,7 @@ import styles from './styles.scss';
 const propTypes = {
     soundOn: bool.isRequired,
     setSound: func.isRequired,
+    navigate: func.isRequired,
 };
 
 class Home extends Component {
@@ -50,6 +51,12 @@ class Home extends Component {
         );
     }
 
+    componentWillUnmount() {
+        if (this.tween) {
+            this.tween.forEach(t => t.kill());
+        }
+    }
+
     invertSound() {
         const { soundOn, setSound } = this.props;
 
@@ -57,7 +64,7 @@ class Home extends Component {
     }
 
     render() {
-        const { soundOn } = this.props;
+        const { soundOn, navigate } = this.props;
 
         const soundClass = soundOn ? styles.soundOn : styles.soundOff;
 
@@ -71,6 +78,7 @@ class Home extends Component {
                 <div className={styles.buttons}>
                     <HomeButton
                         className={styles.play}
+                        onClick={() => navigate('/game')}
                         ref={this.playButton}
                     />
                     <div className={styles.buttonRow}>
