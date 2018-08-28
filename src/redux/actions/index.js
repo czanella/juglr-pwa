@@ -3,9 +3,9 @@
 
 // REGULAR ACTIONS - sync actions with parameters
 export {
-    REGISTER_HELLO,
-    registerHello,
-} from './registerHello';
+    SET_DIMENSIONS,
+    setDimensions,
+} from './setDimensions';
 
 // THUNKS - async actions
 // export { login } from './thunks/login';

@@ -1,6 +1,6 @@
 @import '../../../theme/main.scss';
 
-$spacing: 20px;
+$spacing: 15px;
 
 .home {
     display: flex;
@@ -12,11 +12,11 @@ $spacing: 20px;
 
 .logo {
     height: auto;
-    width: 61.6vw;
+    width: 61.6%;
 }
 
 .buttons {
-    width: 61.6vw;
+    width: 61.6%;
     display: flex;
     flex-direction: column;
 
@@ -38,7 +38,7 @@ $spacing: 20px;
     }
 
     button {
-        height: 0.2 * 61.6vw;
+        height: 60px;
     }
 }
 

@@ -1,8 +1,8 @@
-const express = require('express');
-const storeFactory = require('../src/redux/storeFactory').default;
-const ssr = require('./ssr').default;
+import express from 'express';
+import storeFactory from '../src/redux/storeFactory';
+import ssr from './ssr';
 
-const { registerHello } = require('../src/redux/actions');
+import { registerHello } from '../src/redux/actions';
 
 const app = express();
 

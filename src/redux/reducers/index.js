@@ -1,5 +1,7 @@
-import helloMessage from './helloMessage';
+import width from './width';
+import height from './height';
 
 export default {
-    helloMessage,
+    width,
+    height,
 };

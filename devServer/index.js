@@ -1,14 +1,10 @@
-const fs = require('fs');
-const path = require('path');
-const express = require('express');
-const webpack = require('webpack');
-const notifier = require('node-notifier');
-const opn = require('opn');
-const webpackDevMiddleware = require('webpack-dev-middleware');
-const webpackHotMiddleware = require('webpack-hot-middleware');
-const webpackConfig = require('../webpack.config.client.js');
-
-const HTML_TEMPLATE = fs.readFileSync(path.resolve(__dirname, 'index.html'));
+import path from 'path';
+import express from 'express';
+import webpack from 'webpack';
+import notifier from 'node-notifier';
+import opn from 'opn';
+import webpackDevMiddleware from 'webpack-dev-middleware';
+import webpackConfig from '../webpack.config.client.js';
 
 const app = express();
 
@@ -18,11 +14,8 @@ app.use(webpackDevMiddleware(webpackCompiler, {
     publicPath: '/static',
 }));
 
-app.use(webpackHotMiddleware(webpackCompiler));
-
 app.get('/', (req, res) => {
-    res.set('Content-Type', 'text/html; charset=utf-8');
-    res.send(HTML_TEMPLATE);
+    res.sendFile(path.resolve(__dirname, 'index.html'));
 });
 
 const PORT = process.env.PORT || 8080;
