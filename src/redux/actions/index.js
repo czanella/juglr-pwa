@@ -7,6 +7,11 @@ export {
     setDimensions,
 } from './setDimensions';
 
+export {
+    SET_SOUND,
+    setSound,
+} from './setSound';
+
 // THUNKS - async actions
 // export { login } from './thunks/login';
 // export { logout } from './thunks/logout';
