@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { number, func } from 'prop-types';
 import Home from '../views/Home';
+import DelayedRoute from '../components/DelayedRoute';
 
 import styles from './styles.scss';
 
@@ -50,7 +50,7 @@ class App extends Component {
                 <Helmet>
                     <title>Juglr</title>
                 </Helmet>
-                <Route exact path={'/'} component={Home} />
+                <DelayedRoute exact path={'/'} component={Home} />
             </div>
         );
     }
