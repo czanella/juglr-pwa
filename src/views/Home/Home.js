@@ -11,6 +11,8 @@ const propTypes = {
     soundOn: bool.isRequired,
     setSound: func.isRequired,
     navigate: func.isRequired,
+    shouldEvacuate: bool.isRequired,
+    notifyEvacuationEnd: func.isRequired,
 };
 
 class Home extends Component {
@@ -28,6 +30,25 @@ class Home extends Component {
     }
 
     componentDidMount() {
+        this.assemble(true);
+    }
+
+    componentDidUpdate(prevProps) {
+        if (!prevProps.shouldEvacuate && this.props.shouldEvacuate) {
+            this.disassemble();
+        }
+        if (prevProps.shouldEvacuate && !this.props.shouldEvacuate) {
+            this.assemble();
+        }
+    }
+
+    componentWillUnmount() {
+        this.killTween();
+    }
+
+    assemble(startOutsideScreen = false) {
+        this.killTween();
+
         const targets = shuffle([
             this.logo.current,
             this.playButton.current.root.current,
@@ -35,25 +56,64 @@ class Home extends Component {
             this.aboutButton.current.root.current,
         ]);
 
-        this.tween = TweenMax.staggerFromTo(
+        if (startOutsideScreen) {
+            this.tween = TweenMax.staggerFromTo(
+                targets,
+                1,
+                {
+                    y: window.innerHeight,
+                    rotation: () => 60 - 120 * Math.random(),
+                },
+                {
+                    y: 0,
+                    rotation: 0,
+                    ease: Back.easeOut,
+                },
+                0.1,
+            );
+        } else {
+            this.tween = TweenMax.staggerTo(
+                targets,
+                1,
+                {
+                    y: 0,
+                    rotation: 0,
+                    ease: Back.easeOut,
+                },
+                0.1,
+            );
+        }
+    }
+
+    disassemble() {
+        const { notifyEvacuationEnd } = this.props;
+
+        this.killTween();
+
+        const targets = shuffle([
+            this.logo.current,
+            this.playButton.current.root.current,
+            this.soundButton.current.root.current,
+            this.aboutButton.current.root.current,
+        ]);
+
+        this.tween = TweenMax.staggerTo(
             targets,
             1,
             {
                 y: window.innerHeight,
                 rotation: () => 60 - 120 * Math.random(),
-            },
-            {
-                y: 0,
-                rotation: 0,
-                ease: Back.easeOut,
+                ease: Back.easeIn,
             },
             0.1,
+            notifyEvacuationEnd,
         );
     }
 
-    componentWillUnmount() {
+    killTween() {
         if (this.tween) {
             this.tween.forEach(t => t.kill());
+            this.tween = null;
         }
     }
 
@@ -97,5 +157,7 @@ class Home extends Component {
         );
     }
 }
+
+Home.propTypes = propTypes;
 
 export default Home;

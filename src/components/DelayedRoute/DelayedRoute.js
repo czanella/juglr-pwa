@@ -79,11 +79,12 @@ class DelayedRoute extends React.Component {
             this.setState({
                 shouldEvacuate: false,
                 previousMatch: null,
+                evacuationDone: false,
             });
         }
     }
 
-    notifyEvacuationEnd() {
+    notifyEvacuationEnd = () => {
         this.setState({ evacuationDone: true });
     }
 
