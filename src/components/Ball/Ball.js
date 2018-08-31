@@ -1,38 +1,29 @@
-import { Drawable } from '../lightpixel';
-import { randomPick, CircularQueue, TrailPoint } from '../utils';
+import { randomPick, config } from '../../utils';
+import CircularQueue from './CircularQueue';
+import TrailPoint from './TrailPoint';
 
-const COLOR_LIST = [
-    ['rgb(255, 0, 0)', 'rgba(255, 0, 0, 0.5)'],
-    ['rgb(0, 255, 0)', 'rgba(0, 255, 0, 0.5)'],
-    ['rgb(0, 0, 255)', 'rgba(0, 0, 255, 0.5)'],
-    ['rgb(255, 255, 0)', 'rgba(255, 255, 0, 0.5)'],
-    ['rgb(255, 0, 255)', 'rgba(255, 0, 255, 0.5)'],
-    ['rgb(0, 255, 255)', 'rgba(0, 255, 255, 0.5)'],
-];
-
-const TRAIL_LENGTH = 20;
 const TWO_PI = 2 * Math.PI;
 
-class Ball extends Drawable {
-    constructor (x = 0, y = 0, radius = 10, speedX = 0, speedY = 0, color = null) {
+class Ball {
+    constructor(x = 0, y = 0, speedX = 0, speedY = 0, color = null) {
         super();
 
-        this.radius = radius;
-        this.color = color || randomPick(COLOR_LIST);
+        this.color = color || randomPick(config.ballColors);
 
         this.x = x;
         this.y = y;
         this.speedX = speedX;
         this.speedY = speedY;
-        this.fixed = false;
 
-        this.trail = new CircularQueue(TRAIL_LENGTH, new TrailPoint({ x, y }));
+        this.trail = new CircularQueue(config.trailLength, new TrailPoint({ x, y }));
     }
 
     drawOn(context) {
+        context.save();
+
         context.fillStyle = this.color[1];
         const trailPoints = this.trail.map((p, i) => {
-            return p.sidePoints(this.radius * i / (TRAIL_LENGTH - 1));
+            return p.sidePoints(config.ballRadius * i / (config.trailLength - 1));
         });
         context.beginPath();
         context.moveTo(trailPoints[0].left.x, trailPoints[0].left.y);
@@ -46,8 +37,10 @@ class Ball extends Drawable {
 
         context.fillStyle = this.color[0];
         context.beginPath();
-        context.arc(this.x, this.y, this.radius, 0, TWO_PI);
+        context.arc(this.x, this.y, config.ballRadius, 0, TWO_PI);
         context.fill();
+
+        context.restore();
     }
 
     minY() {
@@ -60,16 +53,13 @@ class Ball extends Drawable {
         this.trail.add(new TrailPoint({ x, y }, this.trail.head()));
     }
 
-    applyGravity(delta, gravityX, gravityY) {
-        if (!this.fixed) {
-            this.speedX += gravityX * delta;
-            this.speedY += gravityY * delta;
+    applyStep(delta) {
+        this.speedY += config.gravity * delta;
 
-            this.setPosition(
-                this.x + this.speedX * delta,
-                this.y + this.speedY * delta,
-            );
-        }
+        this.setPosition(
+            this.x + this.speedX * delta,
+            this.y + this.speedY * delta,
+        );
     }
 
     distance2(x, y) {
