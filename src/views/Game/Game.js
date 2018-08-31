@@ -1,6 +1,7 @@
 import React, { Component, createRef } from 'react';
 import { bool, number } from 'prop-types';
-import { config } from '../../utils';
+import Ball from '../../components/Ball';
+import { config, randomRange } from '../../utils';
 
 import styles from './styles.scss';
 
@@ -23,11 +24,15 @@ class Game extends Component {
         this.animationId = null;
 
         this.gameStep = this.gameStep.bind(this);
+        this.onClick = this.onClick.bind(this);
+        this.removeBall = this.removeBall.bind(this);
     }
 
     componentDidMount() {
         this.resize();
         this.animationId = window.requestAnimationFrame(this.gameStep);
+
+        window.addEventListener('mousedown', this.onClick);
     }
 
     componentDidUpdate(prevProps) {
@@ -42,6 +47,26 @@ class Game extends Component {
         window.cancelAnimationFrame(this.animationId);
     }
 
+    onClick(e) {
+        const { width, height, gameOn } = this.props;
+        const source = e.touches ? e.touches[0] : e;
+        const touchX = source.pageX - (window.innerWidth - width) / 2;
+        const touchY = source.pageY;
+
+        if (!gameOn) {
+            for (let i = 0; i < 5; i++) {
+                const angle = randomRange(-30, -150) * Math.PI / 180;
+                const ball = new Ball(
+                    touchX,
+                    touchY,
+                    250 * Math.cos(angle),
+                    250 * Math.sin(angle),
+                );
+                this.addBall(ball, this.demoBalls);
+            }
+        }
+    }
+
     resize() {
         const { width, height } = this.props;
 
@@ -52,17 +77,18 @@ class Game extends Component {
     gameStep(timestamp) {
         const { width, height } = this.props;
         const context = this.canvas.current.getContext('2d');
+        const delta = (this.previousTimeStamp !== null ? timestamp - this.previousTimeStamp : 0) / 1000;
 
         // Cleans the game canvas
         context.fillStyle = config.backgroundColor;
         context.fillRect(0, 0, width, height);
 
-        // Moves all balls
+        // Moves and draws all balls
         this.collections.forEach((collection) => {
             collection.forEach((ball) => {
                 const originalY = ball.y;
     
-                ball.applyGravity(delta, config.gravity);
+                ball.applyStep(delta);
                 if (ball.x - ball.radius < 0) {
                     ball.x = ball.radius + (ball.radius - ball.x);
                     ball.speedX = -ball.speedX;
@@ -71,6 +97,8 @@ class Game extends Component {
                     ball.x = (width - ball.radius) - (ball.x - (width - ball.radius));
                     ball.speedX = -ball.speedX;
                 }
+
+                ball.drawOn(context);
             });
         });
 

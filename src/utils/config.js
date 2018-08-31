@@ -1,6 +1,6 @@
 const config = {
     gravity: 600,
-    ballRadius: 20,
+    ballRadius: 10,
     hitAreaRadius: 100,
     newBallInterval: 5000,
     maxInitialSpeedX: 300,
@@ -15,7 +15,7 @@ const config = {
         ['rgb(0, 255, 255)', 'rgba(0, 255, 255, 0.5)'],
     ],
     trailLength: 20,
-    backgroundColor: '#550000',
+    backgroundColor: '#000000',
 };
 
 export default config;

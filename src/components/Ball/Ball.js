@@ -6,8 +6,6 @@ const TWO_PI = 2 * Math.PI;
 
 class Ball {
     constructor(x = 0, y = 0, speedX = 0, speedY = 0, color = null) {
-        super();
-
         this.color = color || randomPick(config.ballColors);
 
         this.x = x;
