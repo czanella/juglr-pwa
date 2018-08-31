@@ -32,17 +32,13 @@ class DelayedRoute extends React.Component {
         router: PropTypes.object.isRequired
     };
 
+    initialMatch = this.computeMatch(this.props, this.context.router)
+
     state = {
-        match: null,
-        shouldDisassemble: false,
+        match: this.initialMatch,
+        shouldDisassemble: !this.initialMatch,
         previousMatch: null,
-        disassembleDone: true,
-    }
-
-    componentDidMount() {
-        const match = this.computeMatch(this.props, this.context.router);
-
-        this.setState({ match });
+        disassembleDone: !this.initialMatch,
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
