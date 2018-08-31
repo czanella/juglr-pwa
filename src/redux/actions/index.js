@@ -1,5 +1,5 @@
 // SIMPLE ACTIONS - sync actions with no parameters
-// export * from './simpleActions';
+export * from './simpleActions';
 
 // REGULAR ACTIONS - sync actions with parameters
 export {
