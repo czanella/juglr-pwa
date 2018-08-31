@@ -32,35 +32,17 @@ class DelayedRoute extends React.Component {
         router: PropTypes.object.isRequired
     };
 
-    getChildContext() {
-        return {
-            router: {
-                ...this.context.router,
-                route: {
-                    location: this.props.location || this.context.router.route.location,
-                    match: this.state.match
-                }
-            }
-        };
-    }
-
     state = {
-        match: this.computeMatch(this.props, this.context.router),
+        match: null,
         shouldDisassemble: false,
         previousMatch: null,
-        disassembleDone: false,
+        disassembleDone: true,
     }
 
-    computeMatch(
-        { computedMatch, location, path, strict, exact, sensitive },
-        router
-    ) {
-        if (computedMatch) return computedMatch; // <Switch> already computed the match for us
+    componentDidMount() {
+        const match = this.computeMatch(this.props, this.context.router);
 
-        const { route } = router;
-        const pathname = (location || route.location).pathname;
-
-        return matchPath(pathname, { path, strict, exact, sensitive }, route.match);
+        this.setState({ match });
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
@@ -82,6 +64,30 @@ class DelayedRoute extends React.Component {
                 disassembleDone: false,
             });
         }
+    }
+
+    getChildContext() {
+        return {
+            router: {
+                ...this.context.router,
+                route: {
+                    location: this.props.location || this.context.router.route.location,
+                    match: this.state.match
+                }
+            }
+        };
+    }
+
+    computeMatch(
+        { computedMatch, location, path, strict, exact, sensitive },
+        router
+    ) {
+        if (computedMatch) return computedMatch; // <Switch> already computed the match for us
+
+        const { route } = router;
+        const pathname = (location || route.location).pathname;
+
+        return matchPath(pathname, { path, strict, exact, sensitive }, route.match);
     }
 
     notifyDisassembleEnd = () => {
