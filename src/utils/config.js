@@ -15,6 +15,7 @@ const config = {
         ['rgb(0, 255, 255)', 'rgba(0, 255, 255, 0.5)'],
     ],
     trailLength: 20,
+    backgroundColor: '#550000',
 };
 
 export default config;

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { number, func } from 'prop-types';
+import Game from '../views/Game';
 import Home from '../views/Home';
 import DelayedRoute from '../components/DelayedRoute';
 
@@ -17,11 +19,11 @@ class App extends Component {
         super(props);
 
         this.onResize = this.onResize.bind(this);
+        this.onResize();
     }
 
     componentDidMount() {
         window.addEventListener('resize', this.onResize);
-        this.onResize();
     }
 
     componentWillUnmount() {
@@ -32,8 +34,8 @@ class App extends Component {
         const { setDimensions } = this.props;
 
         setDimensions(
-            Math.min(0.75 * window.innerHeight, window.innerWidth),
-            window.innerHeight,
+            Math.floor(Math.min(0.75 * window.innerHeight, window.innerWidth)),
+            Math.floor(window.innerHeight),
         );
     }
 
@@ -50,6 +52,7 @@ class App extends Component {
                 <Helmet>
                     <title>Juglr</title>
                 </Helmet>
+                <Route path={'/:view?'} component={Game} />
                 <DelayedRoute exact path={'/'} component={Home} />
             </div>
         );

@@ -1,5 +1,14 @@
 import React, { Component, createRef } from 'react';
+import { bool, number } from 'prop-types';
 import { config } from '../../utils';
+
+import styles from './styles.scss';
+
+const propTypes = {
+    gameOn: bool.isRequired,
+    width: number.isRequired,
+    height: number.isRequired,
+};
 
 class Game extends Component {
     constructor(props) {
@@ -38,15 +47,15 @@ class Game extends Component {
 
         this.canvas.current.width = width;
         this.canvas.current.height = height;
-        this.context = this.canvas.current.getContext('2d');
     }
 
     gameStep(timestamp) {
         const { width, height } = this.props;
+        const context = this.canvas.current.getContext('2d');
 
         // Cleans the game canvas
-        context.fillStyle = '#000000';
-        context.fillRect(0, 0, this.width, this.height);
+        context.fillStyle = config.backgroundColor;
+        context.fillRect(0, 0, width, height);
 
         // Moves all balls
         this.collections.forEach((collection) => {
@@ -102,8 +111,10 @@ class Game extends Component {
     }
 
     render() {
-        return <canvas ref={this.canvas} className={StyleSheet.game} />;
+        return <canvas ref={this.canvas} className={styles.game} />;
     }
 }
+
+Game.propTypes = propTypes;
 
 export default Game;
