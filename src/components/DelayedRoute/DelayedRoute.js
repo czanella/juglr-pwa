@@ -46,9 +46,9 @@ class DelayedRoute extends React.Component {
 
     state = {
         match: this.computeMatch(this.props, this.context.router),
-        shouldEvacuate: false,
+        shouldDisassemble: false,
         previousMatch: null,
-        evacuationDone: false,
+        disassembleDone: false,
     }
 
     computeMatch(
@@ -72,24 +72,24 @@ class DelayedRoute extends React.Component {
     componentDidUpdate(prevProps, prevState) {
         if (prevState.match && !this.state.match) {
             this.setState({
-                shouldEvacuate: true,
+                shouldDisassemble: true,
                 previousMatch: prevState.match,
             });
         } else if (!prevState.match && this.state.match) {
             this.setState({
-                shouldEvacuate: false,
+                shouldDisassemble: false,
                 previousMatch: null,
-                evacuationDone: false,
+                disassembleDone: false,
             });
         }
     }
 
-    notifyEvacuationEnd = () => {
-        this.setState({ evacuationDone: true });
+    notifyDisassembleEnd = () => {
+        this.setState({ disassembleDone: true });
     }
 
     render() {
-        const { match, previousMatch, shouldEvacuate, evacuationDone } = this.state;
+        const { match, previousMatch, shouldDisassemble, disassembleDone } = this.state;
         const { children, component, render } = this.props;
         const { history, route, staticContext } = this.context.router;
         const location = this.props.location || route.location;
@@ -98,13 +98,13 @@ class DelayedRoute extends React.Component {
             location,
             history,
             staticContext,
-            shouldEvacuate,
-            notifyEvacuationEnd: this.notifyEvacuationEnd,
+            shouldDisassemble,
+            notifyDisassembleEnd: this.notifyDisassembleEnd,
         };
 
-        if (component) return !evacuationDone ? React.createElement(component, props) : null;
+        if (component) return !disassembleDone ? React.createElement(component, props) : null;
 
-        if (render) return !evacuationDone ? render(props) : null;
+        if (render) return !disassembleDone ? render(props) : null;
 
         if (typeof children === "function") return children(props);
 

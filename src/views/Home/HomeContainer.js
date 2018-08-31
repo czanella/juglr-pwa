@@ -3,17 +3,17 @@ import { withRouter } from 'react-router-dom';
 import Home from './Home';
 import { setSound as setSoundAction } from '../../redux/actions';
 
-const mapStateToProps = (state, { shouldEvacuate }) => {
+const mapStateToProps = (state, { shouldDisassemble }) => {
     const { soundOn } = state;
 
-    return { soundOn, shouldEvacuate };
+    return { soundOn, shouldDisassemble };
 };
 
-const mapDispatchToProps = (dispatch, { history, notifyEvacuationEnd }) => {
+const mapDispatchToProps = (dispatch, { history, notifyDisassembleEnd }) => {
     const setSound = state => dispatch(setSoundAction(state));
     const navigate = to => history.push(to);
 
-    return { setSound, navigate, notifyEvacuationEnd };
+    return { setSound, navigate, notifyDisassembleEnd };
 };
 
 const HomeContainer = connect(

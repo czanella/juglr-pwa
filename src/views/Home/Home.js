@@ -11,8 +11,8 @@ const propTypes = {
     soundOn: bool.isRequired,
     setSound: func.isRequired,
     navigate: func.isRequired,
-    shouldEvacuate: bool.isRequired,
-    notifyEvacuationEnd: func.isRequired,
+    shouldDisassemble: bool.isRequired,
+    notifyDisassembleEnd: func.isRequired,
 };
 
 class Home extends Component {
@@ -34,10 +34,10 @@ class Home extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (!prevProps.shouldEvacuate && this.props.shouldEvacuate) {
+        if (!prevProps.shouldDisassemble && this.props.shouldDisassemble) {
             this.disassemble();
         }
-        if (prevProps.shouldEvacuate && !this.props.shouldEvacuate) {
+        if (prevProps.shouldDisassemble && !this.props.shouldDisassemble) {
             this.assemble();
         }
     }
@@ -86,7 +86,7 @@ class Home extends Component {
     }
 
     disassemble() {
-        const { notifyEvacuationEnd } = this.props;
+        const { notifyDisassembleEnd } = this.props;
 
         this.killTween();
 
@@ -106,7 +106,7 @@ class Home extends Component {
                 ease: Back.easeIn,
             },
             0.1,
-            notifyEvacuationEnd,
+            notifyDisassembleEnd,
         );
     }
 
