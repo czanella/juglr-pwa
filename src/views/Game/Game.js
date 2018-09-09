@@ -88,15 +88,7 @@ class Game extends Component {
             collection.forEach((ball) => {
                 const originalY = ball.y;
     
-                ball.applyStep(delta);
-                if (ball.x - ball.radius < 0) {
-                    ball.x = ball.radius + (ball.radius - ball.x);
-                    ball.speedX = -ball.speedX;
-                }
-                if (ball.x >= width - ball.radius) {
-                    ball.x = (width - ball.radius) - (ball.x - (width - ball.radius));
-                    ball.speedX = -ball.speedX;
-                }
+                ball.applyStep(delta, width);
 
                 ball.drawOn(context);
             });

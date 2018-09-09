@@ -51,13 +51,22 @@ class Ball {
         this.trail.add(new TrailPoint({ x, y }, this.trail.head()));
     }
 
-    applyStep(delta) {
+    applyStep(delta, maxX) {
         this.speedY += config.gravity * delta;
 
-        this.setPosition(
-            this.x + this.speedX * delta,
-            this.y + this.speedY * delta,
-        );
+        let newX = this.x + this.speedX * delta;
+        const newY = this.y + this.speedY * delta;
+
+        if (newX < config.ballRadius && this.speedX <= 0) {
+            newX = 2 * config.ballRadius - newX;
+            this.speedX *= -1;
+        }
+        if (newX > maxX - config.ballRadius && this.speedX >= 0) {
+            newX = 2 * (maxX - config.ballRadius) - newX;
+            this.speedX *= -1;
+        }
+
+        this.setPosition(newX, newY);
     }
 
     distance2(x, y) {
