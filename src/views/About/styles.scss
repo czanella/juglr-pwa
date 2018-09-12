@@ -1,0 +1,11 @@
+@import '../../../theme/main.scss';
+
+.about {
+    @include view();
+    padding: 20px;
+    color: $white;
+    font-size: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    transform: translateX(100%);
+}

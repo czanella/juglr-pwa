@@ -1,4 +1,5 @@
-import React, { Component, createRef } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { func, any, string, object } from 'prop-types';
 
 import styles from './styles.scss';
@@ -8,6 +9,8 @@ const propTypes = {
     onClick: func,
     className: string,
     style: object,
+    to: any,
+    innerRef: any,
 };
 
 const defaultProps = {
@@ -15,30 +18,36 @@ const defaultProps = {
     onClick: null,
     className: null,
     style: null,
+    to: null,
+    innerRef: any,
 };
 
-class HomeButton extends Component {
-    constructor(props) {
-        super(props);
+function HomeButton({ children, onClick, className, style, to, innerRef }) {
+    const buttonProps = {
+        className: styles.homeButton,
+        onClick: onClick,
+        style: style,
+    };
+    let ButtonClass;
 
-        this.root = createRef();
+    if (to) {
+        ButtonClass = Link;
+        Object.assign(buttonProps, {
+            innerRef,
+            to,
+        });
+    } else {
+        ButtonClass = 'button';
+        buttonProps.ref = innerRef;
     }
 
-    render() {
-        const { children, onClick, className } = this.props;
-
-        return (
-            <button
-                className={styles.homeButton}
-                onClick={onClick}
-                ref={this.root}
-            >
-                <div className={[styles.content, className].join(' ')}>
-                    {children}
-                </div>
-            </button>
-        );
-    }
+    return (
+        <ButtonClass {...buttonProps}>
+            <div className={[styles.content, className].join(' ')}>
+                {children}
+            </div>
+        </ButtonClass>
+    );
 }
 
 HomeButton.propTypes = propTypes;

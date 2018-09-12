@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import { number, func } from 'prop-types';
 import Game from '../views/Game';
 import Home from '../views/Home';
+import About from '../views/About';
 import DelayedRoute from '../components/DelayedRoute';
 
 import styles from './styles.scss';
@@ -27,7 +28,7 @@ class App extends Component {
     }
 
     componentWillUnmount() {
-        winow.removeEventListener('resize', this.onResize);
+        window.removeEventListener('resize', this.onResize);
     }
 
     onResize() {
@@ -54,6 +55,7 @@ class App extends Component {
                 </Helmet>
                 <Route path={'/:view?'} component={Game} />
                 <DelayedRoute exact path={'/'} component={Home} />
+                <DelayedRoute path={'/about'} component={About} />
             </div>
         );
     }

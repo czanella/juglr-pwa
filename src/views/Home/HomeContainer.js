@@ -4,16 +4,15 @@ import Home from './Home';
 import { setSound as setSoundAction } from '../../redux/actions';
 
 const mapStateToProps = (state, { shouldDisassemble }) => {
-    const { soundOn } = state;
+    const { soundOn, height } = state;
 
-    return { soundOn, shouldDisassemble };
+    return { soundOn, height, shouldDisassemble };
 };
 
-const mapDispatchToProps = (dispatch, { history, notifyDisassembleEnd }) => {
+const mapDispatchToProps = (dispatch, { notifyDisassembleEnd }) => {
     const setSound = state => dispatch(setSoundAction(state));
-    const navigate = to => history.push(to);
 
-    return { setSound, navigate, notifyDisassembleEnd };
+    return { setSound, notifyDisassembleEnd };
 };
 
 const HomeContainer = connect(

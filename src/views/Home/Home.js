@@ -1,6 +1,6 @@
 import React, { Component, createRef } from 'react';
 import { TweenMax, Back } from 'gsap';
-import { bool, func } from 'prop-types';
+import { bool, func, number } from 'prop-types';
 import { shuffle } from '../../utils';
 import logo from './logo.png';
 import HomeButton from '../../components/HomeButton';
@@ -8,9 +8,9 @@ import HomeButton from '../../components/HomeButton';
 import styles from './styles.scss';
 
 const propTypes = {
+    height: number.isRequired,
     soundOn: bool.isRequired,
     setSound: func.isRequired,
-    navigate: func.isRequired,
     shouldDisassemble: bool.isRequired,
     notifyDisassembleEnd: func.isRequired,
 };
@@ -19,10 +19,10 @@ class Home extends Component {
     constructor(props) {
         super(props);
 
-        this.logo = createRef();
-        this.playButton = createRef();
-        this.soundButton = createRef();
-        this.aboutButton = createRef();
+        this.logo = null;
+        this.playButton = null;
+        this.soundButton = null;
+        this.aboutButton = null;
 
         this.tween = null;
 
@@ -46,22 +46,28 @@ class Home extends Component {
         this.killTween();
     }
 
+    getTargets() {
+        return shuffle([
+            this.logo,
+            this.playButton,
+            this.soundButton,
+            this.aboutButton,
+        ]);
+    }
+
     assemble(startOutsideScreen = false) {
+        const { height } = this.props;
+
         this.killTween();
 
-        const targets = shuffle([
-            this.logo.current,
-            this.playButton.current.root.current,
-            this.soundButton.current.root.current,
-            this.aboutButton.current.root.current,
-        ]);
+        const targets = this.getTargets();
 
         if (startOutsideScreen) {
             this.tween = TweenMax.staggerFromTo(
                 targets,
                 1,
                 {
-                    y: window.innerHeight,
+                    y: height,
                     rotation: () => 60 - 120 * Math.random(),
                 },
                 {
@@ -86,22 +92,17 @@ class Home extends Component {
     }
 
     disassemble() {
-        const { notifyDisassembleEnd } = this.props;
+        const { notifyDisassembleEnd, height } = this.props;
 
         this.killTween();
 
-        const targets = shuffle([
-            this.logo.current,
-            this.playButton.current.root.current,
-            this.soundButton.current.root.current,
-            this.aboutButton.current.root.current,
-        ]);
+        const targets = this.getTargets();
 
         this.tween = TweenMax.staggerTo(
             targets,
             1,
             {
-                y: window.innerHeight,
+                y: height,
                 rotation: () => 60 - 120 * Math.random(),
                 ease: Back.easeIn,
             },
@@ -124,7 +125,7 @@ class Home extends Component {
     }
 
     render() {
-        const { soundOn, navigate } = this.props;
+        const { soundOn } = this.props;
 
         const soundClass = soundOn ? styles.soundOn : styles.soundOff;
 
@@ -133,23 +134,24 @@ class Home extends Component {
                 <img
                     src={logo}
                     className={styles.logo} alt={'Juglr'}
-                    ref={this.logo}
+                    ref={r => this.logo = r}
                 />
                 <div className={styles.buttons}>
                     <HomeButton
                         className={styles.play}
-                        onClick={() => navigate('/game')}
-                        ref={this.playButton}
+                        to={'/game'}
+                        innerRef={r => this.playButton = r}
                     />
                     <div className={styles.buttonRow}>
                         <HomeButton
                             className={soundClass}
                             onClick={this.invertSound}
-                            ref={this.soundButton}
+                            innerRef={r => this.soundButton = r}
                         />
                         <HomeButton
                             className={styles.question}
-                            ref={this.aboutButton}
+                            to={'/about'}
+                            innerRef={r => this.aboutButton = r}
                         />
                     </div>
                 </div>
