@@ -19,7 +19,6 @@ class Game extends Component {
 
         this.demoBalls = [];
         this.gameBalls = [];
-        this.collections = [this.demoBalls, this.gameBalls];
         this.previousTimeStamp = null;
         this.animationId = null;
 
@@ -36,10 +35,15 @@ class Game extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        const { width, height } = this.props;
+        const { width, height, gameOn } = this.props;
 
         if (prevProps.width !== width || prevProps.height !== height) {
             this.resize();
+        }
+
+        if (prevProps.gameOn && !gameOn) {
+            this.demoBalls = this.demoBalls.concat(this.gameBalls);
+            this.gameBalls = [];
         }
     }
 
@@ -51,7 +55,7 @@ class Game extends Component {
         const { width, height, gameOn } = this.props;
         const source = e.touches ? e.touches[0] : e;
         const touchX = source.pageX - (window.innerWidth - width) / 2;
-        const touchY = source.pageY;
+        const touchY = source.pageY - (window.innerHeight - height) / 2;
 
         if (!gameOn) {
             for (let i = 0; i < 5; i++) {
@@ -77,17 +81,15 @@ class Game extends Component {
     gameStep(timestamp) {
         const { width, height } = this.props;
         const context = this.canvas.current.getContext('2d');
-        const delta = (this.previousTimeStamp !== null ? timestamp - this.previousTimeStamp : 0) / 1000;
+        const delta = (this.previousTimeStamp ? timestamp - this.previousTimeStamp : 0) / 1000;
 
         // Cleans the game canvas
         context.fillStyle = config.backgroundColor;
         context.fillRect(0, 0, width, height);
 
         // Moves and draws all balls
-        this.collections.forEach((collection) => {
+        [this.demoBalls, this.gameBalls].forEach((collection) => {
             collection.forEach((ball) => {
-                const originalY = ball.y;
-    
                 ball.applyStep(delta, width);
 
                 ball.drawOn(context);
@@ -114,7 +116,7 @@ class Game extends Component {
     removeBall(ball) {
         let ballIndex;
 
-        this.collections.forEach((collection) => {
+        [this.demoBalls, this.gameBalls].forEach((collection) => {
             ballIndex = collection.indexOf(ball);
             if (ballIndex >= 0) {
                 collection.splice(ballIndex, 1);
@@ -123,7 +125,7 @@ class Game extends Component {
     }
 
     removeAllBalls() {
-        this.collections.forEach(collection => collection.splice(0));
+        [this.demoBalls, this.gameBalls].forEach(collection => collection.splice(0));
     }
 
     ballsOffScreen() {
