@@ -1,0 +1,27 @@
+@import '../../../theme/main.scss';
+
+$scoreTransitionTime: 0.5;
+
+.score {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    font-family: $mainFont;
+    font-size: 60px;
+    color: $white;
+    box-sizing: border-box;
+    padding: 10px 0px;
+    text-align: center;
+    transition: transform #{$scoreTransitionTime}s ease-in;
+    transform: translateY(-100%);
+
+    &.active {
+        transition: transform #{$scoreTransitionTime}s ease-out;
+        transform: translateY(0%);
+    }
+}
+
+:export {
+    scoreTransitionTime: $scoreTransitionTime;
+}

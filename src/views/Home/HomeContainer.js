@@ -9,10 +9,10 @@ const mapStateToProps = (state, { shouldDisassemble }) => {
     return { soundOn, height, shouldDisassemble };
 };
 
-const mapDispatchToProps = (dispatch, { notifyDisassembleEnd }) => {
+const mapDispatchToProps = (dispatch, { notifyDisassembleFinish }) => {
     const setSound = state => dispatch(setSoundAction(state));
 
-    return { setSound, notifyDisassembleEnd };
+    return { setSound, notifyDisassembleFinish };
 };
 
 const HomeContainer = connect(

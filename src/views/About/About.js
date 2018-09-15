@@ -7,7 +7,7 @@ import styles from './styles.scss';
 
 const propTypes = {
     shouldDisassemble: bool.isRequired,
-    notifyDisassembleEnd: func.isRequired,
+    notifyDisassembleFinish: func.isRequired,
     width: number.isRequired,
 };
 
@@ -55,14 +55,14 @@ class About extends Component {
     }
 
     disassemble() {
-        const { notifyDisassembleEnd, width } = this.props;
+        const { notifyDisassembleFinish, width } = this.props;
 
         this.killTween();
 
         this.tween = TweenMax.to(this.root.current, 0.5, {
             x: -width,
             ease: Power2.easeIn,
-            onComplete: notifyDisassembleEnd,
+            onComplete: notifyDisassembleFinish,
         });
     }
 

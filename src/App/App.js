@@ -5,6 +5,7 @@ import { number, func } from 'prop-types';
 import Game from '../views/Game';
 import Home from '../views/Home';
 import About from '../views/About';
+import Score from '../views/Score';
 import DelayedRoute from '../components/DelayedRoute';
 
 import styles from './styles.scss';
@@ -56,6 +57,7 @@ class App extends Component {
                 <Route path={'/:view?'} component={Game} />
                 <DelayedRoute exact path={'/'} component={Home} />
                 <DelayedRoute path={'/about'} component={About} />
+                <DelayedRoute path={'/game'} component={Score} />
             </div>
         );
     }

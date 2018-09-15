@@ -86,7 +86,7 @@ class DelayedRoute extends React.Component {
         return matchPath(pathname, { path, strict, exact, sensitive }, route.match);
     }
 
-    notifyDisassembleEnd = () => {
+    notifyDisassembleFinish = () => {
         this.setState({ disassembleDone: true });
     }
 
@@ -101,7 +101,7 @@ class DelayedRoute extends React.Component {
             history,
             staticContext,
             shouldDisassemble,
-            notifyDisassembleEnd: this.notifyDisassembleEnd,
+            notifyDisassembleFinish: this.notifyDisassembleFinish,
         };
 
         if (component) return !disassembleDone ? React.createElement(component, props) : null;

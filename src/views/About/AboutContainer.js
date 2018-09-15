@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import About from './About';
 
-const mapStateToProps = (state, { shouldDisassemble, notifyDisassembleEnd }) => {
+const mapStateToProps = (state, { shouldDisassemble, notifyDisassembleFinish }) => {
     const { width } = state;
 
-    return { width, shouldDisassemble, notifyDisassembleEnd };
+    return { width, shouldDisassemble, notifyDisassembleFinish };
 };
 
 const AboutContainer = connect(

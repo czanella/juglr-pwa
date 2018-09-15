@@ -12,7 +12,7 @@ const propTypes = {
     soundOn: bool.isRequired,
     setSound: func.isRequired,
     shouldDisassemble: bool.isRequired,
-    notifyDisassembleEnd: func.isRequired,
+    notifyDisassembleFinish: func.isRequired,
 };
 
 class Home extends Component {
@@ -92,7 +92,7 @@ class Home extends Component {
     }
 
     disassemble() {
-        const { notifyDisassembleEnd, height } = this.props;
+        const { notifyDisassembleFinish, height } = this.props;
 
         this.killTween();
 
@@ -107,7 +107,7 @@ class Home extends Component {
                 ease: Back.easeIn,
             },
             0.1,
-            notifyDisassembleEnd,
+            notifyDisassembleFinish,
         );
     }
 
