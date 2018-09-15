@@ -20,5 +20,5 @@ export default (url, store) => {
 
     const helmet = Helmet.renderStatic();
 
-    return htmlTemplate(body, store.getState(), helmet);
+    return htmlTemplate(store.getState(), body, helmet);
 };

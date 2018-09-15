@@ -5,6 +5,7 @@ import notifier from 'node-notifier';
 import opn from 'opn';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackConfig from '../webpack.config.client.js';
+import htmlTemplate from '../server/htmlTemplate';
 
 const app = express();
 
@@ -15,7 +16,7 @@ app.use(webpackDevMiddleware(webpackCompiler, {
 }));
 
 app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'index.html'));
+    res.send(htmlTemplate());
 });
 
 const PORT = process.env.PORT || 8080;

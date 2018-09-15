@@ -12,6 +12,11 @@ export {
     setSound,
 } from './setSound';
 
+export {
+    SET_SCORE,
+    setScore,
+} from './setScore';
+
 // THUNKS - async actions
 // export { login } from './thunks/login';
 // export { logout } from './thunks/logout';
