@@ -1,6 +1,6 @@
 @import '../../../theme/main.scss';
 
-$scoreTransitionTime: 0.5;
+$scoreOutsidePosition: 100;
 
 .score {
     position: absolute;
@@ -13,15 +13,9 @@ $scoreTransitionTime: 0.5;
     box-sizing: border-box;
     padding: 10px 0px;
     text-align: center;
-    transition: transform #{$scoreTransitionTime}s ease-in;
-    transform: translateY(-100%);
-
-    &.active {
-        transition: transform #{$scoreTransitionTime}s ease-out;
-        transform: translateY(0%);
-    }
+    transform: translateY(-#{$scoreOutsidePosition}px);
 }
 
 :export {
-    scoreTransitionTime: $scoreTransitionTime;
+    scoreOutsidePosition: $scoreOutsidePosition;
 }

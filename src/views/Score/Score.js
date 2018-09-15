@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
+import { TweenMax, Power2 } from 'gsap';
 import { bool, number, func } from 'prop-types';
 
 import styles from './styles.scss';
@@ -9,25 +10,22 @@ const propTypes = {
     notifyDisassembleFinish: func.isRequired,
 };
 
+const TWEEN_TIME = 0.5;
+
 class Score extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            active: false,
-        };
-
-        this.disassembleTimeout = null;
-
-        this.assemble = this.assemble.bind(this);
+        this.tween = null;
+        this.root = createRef();
     }
 
     componentDidMount() {
-        window.setTimeout(this.assemble, 0);
+        this.assemble();
     }
 
     componentWillUnmount() {
-        this.clearTimeout();
+        this.killTween();
     }
 
     componentDidUpdate(prevProps) {
@@ -41,38 +39,44 @@ class Score extends Component {
         }
     }
 
-    clearTimeout() {
-        window.clearTimeout(this.disassembleTimeout);
+    killTween() {
+        if (this.tween) {
+            this.tween.kill();
+            this.tween = null;
+        }
     }
 
     assemble() {
-        this.clearTimeout();
-        this.disassembleTimeout = null;
-        this.setState({ active: true });
+        this.killTween();
+        this.tween = TweenMax.to(
+            this.root.current,
+            TWEEN_TIME,
+            {
+                y: 0,
+                ease: Power2.easeOut,
+            },
+        );
     }
 
     disassemble() {
         const { notifyDisassembleFinish } = this.props;
 
-        this.clearTimeout();
-        this.disassembleTimeout = window.setTimeout(
-            notifyDisassembleFinish,
-            styles.scoreTransitionTime * 1000,
+        this.killTween();
+        this.tween = TweenMax.to(
+            this.root.current,
+            TWEEN_TIME,
+            {
+                y: -styles.scoreOutsidePosition,
+                ease: Power2.easeIn,
+            },
         );
-        this.setState({ active: false });
     }
 
     render() {
         const { score } = this.props;
-        const { active } = this.state;
-
-        const classes = [styles.score];
-        if (active) {
-            classes.push(styles.active);
-        }
 
         return (
-            <div className={classes.join(' ')}>
+            <div className={styles.score} ref={this.root}>
                 {score}
             </div>
         );
