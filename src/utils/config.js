@@ -3,6 +3,7 @@ const config = {
     ballRadius: 10,
     hitAreaRadius: 100,
     newBallInterval: 5000,
+    firstBallInterval: 5000,
     maxInitialSpeedX: 300,
     tapImpulse: [600, 900],
     tapAngle: [60, 120],

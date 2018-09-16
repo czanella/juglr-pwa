@@ -21,6 +21,7 @@ class Game extends Component {
         this.gameBalls = [];
         this.previousTimeStamp = null;
         this.animationId = null;
+        this.newBallTimestamp = null;
 
         this.gameStep = this.gameStep.bind(this);
         this.onClick = this.onClick.bind(this);
@@ -45,6 +46,10 @@ class Game extends Component {
             this.demoBalls = this.demoBalls.concat(this.gameBalls);
             this.gameBalls = [];
         }
+
+        if (!prevProps.gameOn && gameOn) {
+            this.newBallTimestamp = null;
+        }
     }
 
     componentWillUnmount() {
@@ -52,6 +57,8 @@ class Game extends Component {
     }
 
     onClick(e) {
+        e.preventDefault();
+
         const { width, height, gameOn } = this.props;
         const source = e.touches ? e.touches[0] : e;
         const touchX = source.pageX - (window.innerWidth - width) / 2;
@@ -68,6 +75,8 @@ class Game extends Component {
                 );
                 this.addBall(ball, this.demoBalls);
             }
+        } else {
+
         }
     }
 
@@ -79,7 +88,7 @@ class Game extends Component {
     }
 
     gameStep(timestamp) {
-        const { width, height } = this.props;
+        const { width, height, gameOn } = this.props;
         const context = this.canvas.current.getContext('2d');
         const delta = (this.previousTimeStamp ? timestamp - this.previousTimeStamp : 0) / 1000;
 
@@ -99,6 +108,27 @@ class Game extends Component {
         // Removes the demo balls that are off screen
         const demoBallsOff = this.demoBalls.filter(b => b.minY() >= height);
         demoBallsOff.forEach(this.removeBall);
+
+        // The actual logic of the game
+        if (gameOn) {
+            // Should add a new ball?
+            if (!this.newBallTimestamp) {
+                this.newBallTimestamp = timestamp + config.firstBallInterval;
+            }
+            if (timestamp - this.newBallTimestamp > config.newBallInterval) {
+                this.newBallTimestamp = timestamp;
+                this.addBall(new Ball(
+                    randomRange(config.ballRadius, width - config.ballRadius),
+                    -config.ballRadius,
+                    randomRange(-config.maxInitialSpeedX, config.maxInitialSpeedX),
+                    0,
+                ), this.gameBalls);
+            }
+
+            // Check if any game ball is off screen
+            const gameBallsOff = this.gameBalls.filter(b => b.y >= height);
+            gameBallsOff.forEach(this.removeBall);
+        }
 
         // Stores the timestamp and requests the next frame
         this.previousTimeStamp = timestamp;
