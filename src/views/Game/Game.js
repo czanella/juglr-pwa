@@ -25,18 +25,25 @@ class Game extends Component {
         this.gameBalls = [];
         this.previousTimeStamp = null;
         this.animationId = null;
-        this.newBallTimestamp = null;
+        this.ballLauncherIntervalId = null;
 
         this.gameStep = this.gameStep.bind(this);
         this.onClick = this.onClick.bind(this);
+        this.launchBall = this.launchBall.bind(this);
         this.removeBall = this.removeBall.bind(this);
     }
 
     componentDidMount() {
+        const { gameOn } = this.props;
+
         this.resize();
         this.animationId = window.requestAnimationFrame(this.gameStep);
 
         window.addEventListener('mousedown', this.onClick);
+
+        if (gameOn) {
+            this.startGame();
+        }
     }
 
     componentDidUpdate(prevProps) {
@@ -46,13 +53,12 @@ class Game extends Component {
             this.resize();
         }
 
-        if (prevProps.gameOn && !gameOn) {
-            this.demoBalls = this.demoBalls.concat(this.gameBalls);
-            this.gameBalls = [];
+        if (!prevProps.gameOn && gameOn) {
+            this.startGame();
         }
 
-        if (!prevProps.gameOn && gameOn) {
-            this.newBallTimestamp = null;
+        if (prevProps.gameOn && !gameOn) {
+            this.stopGame();
         }
     }
 
@@ -60,11 +66,19 @@ class Game extends Component {
         window.cancelAnimationFrame(this.animationId);
     }
 
-    resize() {
-        const { width, height } = this.props;
+    startGame() {
+        this.ballLauncherIntervalId = window.setInterval(
+            this.launchBall,
+            config.newBallInterval,
+        );
+        this.launchBall();
+    }
 
-        this.canvas.current.width = width;
-        this.canvas.current.height = height;
+    stopGame() {
+        window.clearInterval(this.ballLauncherIntervalId);
+        this.ballLauncherIntervalId = null;
+        this.demoBalls = this.demoBalls.concat(this.gameBalls);
+        this.gameBalls = [];
     }
 
     gameStep(timestamp) {
@@ -86,26 +100,14 @@ class Game extends Component {
         });
 
         // Removes the demo balls that are off screen
-        const demoBallsOff = this.demoBalls.filter(b => b.minY() >= height);
-        demoBallsOff.forEach(this.removeBall);
+        if (this.demoBalls.length > 0) {
+            const demoBallsOff = this.demoBalls.filter(b => b.minY() >= height);
+            demoBallsOff.forEach(this.removeBall);
+        }
 
         // The actual logic of the game
         if (gameOn) {
-            // Should add a new ball?
-            if (!this.newBallTimestamp) {
-                this.newBallTimestamp = timestamp + config.firstBallInterval;
-            }
-            if (timestamp - this.newBallTimestamp > config.newBallInterval) {
-                this.newBallTimestamp = timestamp;
-                this.addBall(new Ball(
-                    randomRange(config.ballRadius, width - config.ballRadius),
-                    -config.ballRadius,
-                    randomRange(-config.maxInitialSpeedX, config.maxInitialSpeedX),
-                    0,
-                ), this.gameBalls);
-            }
-
-            // Check if any game ball is off screen
+            // Check if any game ball is off screen. If so, game over, man!
             const gameBallsOff = this.gameBalls.filter(b => b.y >= height);
             gameBallsOff.forEach(this.removeBall);
         }
@@ -156,6 +158,17 @@ class Game extends Component {
         }
     }
 
+    launchBall() {
+        const { width } = this.props;
+
+        this.addBall(new Ball(
+            randomRange(config.ballRadius, width - config.ballRadius),
+            -config.ballRadius,
+            randomRange(-config.maxInitialSpeedX, config.maxInitialSpeedX),
+            0,
+        ), this.gameBalls);
+    }
+
     removeBall(ball) {
         let ballIndex;
 
@@ -173,6 +186,13 @@ class Game extends Component {
 
     ballsOffScreen() {
         return this.balls.filter(b => b.y - b.radius >= this.height);
+    }
+
+    resize() {
+        const { width, height } = this.props;
+
+        this.canvas.current.width = width;
+        this.canvas.current.height = height;
     }
 
     render() {
