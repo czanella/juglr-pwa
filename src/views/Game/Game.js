@@ -25,7 +25,7 @@ class Game extends Component {
         this.gameBalls = [];
         this.previousTimeStamp = null;
         this.animationId = null;
-        this.ballLauncherIntervalId = null;
+        this.ballLauncherId = null;
 
         this.gameStep = this.gameStep.bind(this);
         this.onClick = this.onClick.bind(this);
@@ -67,16 +67,15 @@ class Game extends Component {
     }
 
     startGame() {
-        this.ballLauncherIntervalId = window.setInterval(
+        this.ballLauncherId = window.setTimeout(
             this.launchBall,
-            config.newBallInterval,
+            config.firstBallInterval,
         );
-        this.launchBall();
     }
 
     stopGame() {
-        window.clearInterval(this.ballLauncherIntervalId);
-        this.ballLauncherIntervalId = null;
+        window.clearTimeout(this.ballLauncherId);
+        this.ballLauncherId = null;
         this.demoBalls = this.demoBalls.concat(this.gameBalls);
         this.gameBalls = [];
     }
@@ -108,7 +107,9 @@ class Game extends Component {
         // The actual logic of the game
         if (gameOn) {
             // Check if any game ball is off screen. If so, game over, man!
-            const gameBallsOff = this.gameBalls.filter(b => b.y >= height);
+            const gameBallsOff = this.gameBalls.filter(
+                b => b.y >= height && b.speedY > 0,
+            );
             gameBallsOff.forEach(this.removeBall);
         }
 
@@ -127,7 +128,7 @@ class Game extends Component {
 
         if (!gameOn) {
             for (let i = 0; i < 5; i++) {
-                const angle = randomRange(-30, -150) * Math.PI / 180;
+                const angle = randomRange(...config.demoBallAngle);
                 const ball = new Ball(
                     touchX,
                     touchY,
@@ -139,8 +140,8 @@ class Game extends Component {
         } else {
             this.gameBalls.forEach((ball) => {
                 if (ball.distance2(touchX, touchY) <= HIT_DISTANCE2) {
-                    const angle = randomRange(config.tapAngle[0], config.tapAngle[1]);
-                    const speed = randomRange(config.tapImpulse[0], config.tapImpulse[1]);
+                    const angle = randomRange(...config.tapAngle);
+                    const speed = randomRange(...config.tapImpulse);
                     ball.speedX = speed * Math.cos(angle);
                     ball.speedY = -speed * Math.sin(angle);
     
@@ -159,14 +160,20 @@ class Game extends Component {
     }
 
     launchBall() {
-        const { width } = this.props;
+        const { width, height } = this.props;
 
-        this.addBall(new Ball(
+        const newBall = new Ball(
             randomRange(config.ballRadius, width - config.ballRadius),
-            -config.ballRadius,
-            randomRange(-config.maxInitialSpeedX, config.maxInitialSpeedX),
-            0,
-        ), this.gameBalls);
+            height + config.ballRadius,
+            randomRange(...config.initialSpeedX),
+            randomRange(...config.initialSpeedY),
+        );
+
+        this.addBall(newBall, this.gameBalls);
+        this.ballLauncherId = window.setTimeout(
+            this.launchBall,
+            randomRange(...config.newBallInterval),
+        );
     }
 
     removeBall(ball) {
