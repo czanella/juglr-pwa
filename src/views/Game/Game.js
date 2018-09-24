@@ -1,5 +1,5 @@
 import React, { Component, createRef } from 'react';
-import { bool, number } from 'prop-types';
+import { bool, number, func } from 'prop-types';
 import Ball from '../../components/Ball';
 import { config, randomRange } from '../../utils';
 
@@ -7,9 +7,13 @@ import styles from './styles.scss';
 
 const propTypes = {
     gameOn: bool.isRequired,
+    score: number.isRequired,
     width: number.isRequired,
     height: number.isRequired,
+    setScore: func.isRequired,
 };
+
+const HIT_DISTANCE2 = config.hitAreaRadius ** 2;
 
 class Game extends Component {
     constructor(props) {
@@ -54,30 +58,6 @@ class Game extends Component {
 
     componentWillUnmount() {
         window.cancelAnimationFrame(this.animationId);
-    }
-
-    onClick(e) {
-        e.preventDefault();
-
-        const { width, height, gameOn } = this.props;
-        const source = e.touches ? e.touches[0] : e;
-        const touchX = source.pageX - (window.innerWidth - width) / 2;
-        const touchY = source.pageY - (window.innerHeight - height) / 2;
-
-        if (!gameOn) {
-            for (let i = 0; i < 5; i++) {
-                const angle = randomRange(-30, -150) * Math.PI / 180;
-                const ball = new Ball(
-                    touchX,
-                    touchY,
-                    250 * Math.cos(angle),
-                    250 * Math.sin(angle),
-                );
-                this.addBall(ball, this.demoBalls);
-            }
-        } else {
-
-        }
     }
 
     resize() {
@@ -133,6 +113,39 @@ class Game extends Component {
         // Stores the timestamp and requests the next frame
         this.previousTimeStamp = timestamp;
         this.animationId = window.requestAnimationFrame(this.gameStep);
+    }
+
+    onClick(e) {
+        e.preventDefault();
+        
+        const { width, height, gameOn, score, setScore } = this.props;
+        const source = e.touches ? e.touches[0] : e;
+        const touchX = source.pageX - (window.innerWidth - width) / 2;
+        const touchY = source.pageY - (window.innerHeight - height) / 2;
+
+        if (!gameOn) {
+            for (let i = 0; i < 5; i++) {
+                const angle = randomRange(-30, -150) * Math.PI / 180;
+                const ball = new Ball(
+                    touchX,
+                    touchY,
+                    250 * Math.cos(angle),
+                    250 * Math.sin(angle),
+                );
+                this.addBall(ball, this.demoBalls);
+            }
+        } else {
+            this.gameBalls.forEach((ball) => {
+                if (ball.distance2(touchX, touchY) <= HIT_DISTANCE2) {
+                    const angle = randomRange(config.tapAngle[0], config.tapAngle[1]);
+                    const speed = randomRange(config.tapImpulse[0], config.tapImpulse[1]);
+                    ball.speedX = speed * Math.cos(angle);
+                    ball.speedY = -speed * Math.sin(angle);
+    
+                    setScore(score + 1);
+                }
+            });
+        }
     }
 
     addBall(ball, collection) {

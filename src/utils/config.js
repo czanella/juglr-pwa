@@ -3,10 +3,10 @@ const config = {
     ballRadius: 10,
     hitAreaRadius: 100,
     newBallInterval: 5000,
-    firstBallInterval: 5000,
+    firstBallInterval: 1000,
     maxInitialSpeedX: 300,
-    tapImpulse: [600, 900],
-    tapAngle: [60, 120],
+    tapImpulse: [400, 600],
+    tapAngle: [60 * Math.PI / 180, 120 * Math.PI / 180],
     ballColors: [
         ['rgb(255, 0, 0)', 'rgba(255, 0, 0, 0.5)'],
         ['rgb(0, 255, 0)', 'rgba(0, 255, 0, 0.5)'],
