@@ -47,6 +47,14 @@ class GameOver extends Component {
         this.killTween();
     }
 
+    getTargets() {
+        return [
+            this.gameOver.current,
+            this.scoreBoard.current,
+            this.homeButton.current,
+        ];
+    }
+
     assemble(startOutsideScreen = false) {
         const { width } = this.props;
 
@@ -65,6 +73,7 @@ class GameOver extends Component {
                     x: 0,
                     ease: Power2.easeOut,
                 },
+                '+=0',
                 TWEEN_STAGGER,
             );
         } else {
@@ -75,6 +84,7 @@ class GameOver extends Component {
                     x: 0,
                     ease: Power2.easeOut,
                 },
+                '+=0',
                 TWEEN_STAGGER,
             );
         }
@@ -95,16 +105,9 @@ class GameOver extends Component {
                 ease: Power2.easeIn,
             },
             TWEEN_STAGGER,
+            '+=0',
             notifyDisassembleFinish,
         );
-    }
-
-    getTargets() {
-        return [
-            this.gameOver.current,
-            this.scoreBoard.current,
-            this.homeButton.current,
-        ];
     }
 
     killTween() {
