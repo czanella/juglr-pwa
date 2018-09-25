@@ -1,5 +1,6 @@
 import React, { Component, createRef } from 'react';
 import { TweenMax, Power2 } from 'gsap';
+import HomeButton from '../../components/HomeButton';
 import { number, func, bool } from 'prop-types';
 import gameOverImage from './gameOver.png';
 
@@ -18,6 +19,7 @@ class GameOver extends Component {
 
         this.gameOver = createRef();
         this.tween = null;
+        this.homeButton = null;
     }
 
     componentDidMount() {
@@ -25,7 +27,14 @@ class GameOver extends Component {
     }
 
     componentDidUpdate(prevProps) {
+        const { shouldDisassemble } = this.props;
 
+        if (!prevProps.shouldDisassemble && shouldDisassemble) {
+            this.disassemble();
+        }
+        if (prevProps.shouldDisassemble && !shouldDisassemble) {
+            this.assemble();
+        }
     }
 
     assemble() {
@@ -37,6 +46,8 @@ class GameOver extends Component {
     }
 
     render() {
+        const { score, highScore } = this.props;
+
         return (
             <div className={styles.gameOver}>
                 <img
@@ -45,6 +56,28 @@ class GameOver extends Component {
                     alt={'Game Over'}
                     ref={this.gameOver}
                 />
+                <div className={styles.scoreBoard}>
+                    <div className={styles.scoreLine}>
+                        <p>Score</p>
+                        <p>{score}</p>
+                    </div>
+                    <div className={styles.scoreLine}>
+                        <p>Best</p>
+                        <p>
+                            <span className={styles.new}>
+                                NEW!
+                            </span>
+                            {highScore}
+                        </p>
+                    </div>
+                </div>
+                <div className={styles.buttonContainer}>
+                    <HomeButton
+                        className={styles.home}
+                        to={'/'}
+                        innerRef={r => this.homeButton = r}
+                    />
+                </div>
             </div>
         );
     }

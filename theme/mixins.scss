@@ -1,3 +1,5 @@
+@import './colors.scss';
+
 @mixin view() {
     width: 100%;
     height: 100%;
@@ -6,4 +8,12 @@
     left: 0px;
     top: 0px;
     box-sizing: border-box;
+}
+
+@mixin textOutline($to, $color) {
+    text-shadow:
+        -#{$to} -#{$to} 0 $color,
+        #{$to} -#{$to} 0 $color,
+        -#{$to} #{$to} 0 $color,
+        #{$to} #{$to} 0 $color;
 }

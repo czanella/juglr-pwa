@@ -6,6 +6,7 @@ import Game from '../views/Game';
 import Home from '../views/Home';
 import About from '../views/About';
 import Score from '../views/Score';
+import GameOver from '../views/GameOver';
 import DelayedRoute from '../components/DelayedRoute';
 
 import styles from './styles.scss';
@@ -56,8 +57,9 @@ class App extends Component {
                 </Helmet>
                 <Route path={'/:view?'} component={Game} />
                 <DelayedRoute exact path={'/'} component={Home} />
-                <DelayedRoute path={'/about'} component={About} />
-                <DelayedRoute path={'/game'} component={Score} />
+                <DelayedRoute exact path={'/about'} component={About} />
+                <DelayedRoute exact path={'/game'} component={Score} />
+                <DelayedRoute exact path={'/game-over'} component={GameOver} />
             </div>
         );
     }
