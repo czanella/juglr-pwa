@@ -2,9 +2,15 @@ import { connect } from 'react-redux';
 import GameOver from './GameOver';
 
 const mapStateToProps = (state, { shouldDisassemble, notifyDisassembleFinish }) => {
-    const { score, highScore } = state;
+    const { score, highScore, width } = state;
 
-    return { score, highScore, shouldDisassemble, notifyDisassembleFinish };
+    return {
+        score,
+        highScore,
+        shouldDisassemble,
+        notifyDisassembleFinish,
+        width,
+    };
 };
 
 const GameOverContainer = connect(

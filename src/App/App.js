@@ -56,10 +56,10 @@ class App extends Component {
                     <title>Juglr</title>
                 </Helmet>
                 <Route path={'/:view?'} component={Game} />
+                <DelayedRoute exact path={'/game-over'} component={GameOver} />
                 <DelayedRoute exact path={'/'} component={Home} />
                 <DelayedRoute exact path={'/about'} component={About} />
                 <DelayedRoute exact path={'/game'} component={Score} />
-                <DelayedRoute exact path={'/game-over'} component={GameOver} />
             </div>
         );
     }

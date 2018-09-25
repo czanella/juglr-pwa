@@ -9,21 +9,27 @@ import styles from './styles.scss';
 const propTypes = {
     score: number.isRequired,
     highScore: number.isRequired,
+    width: number.isRequired,
     shouldDisassemble: bool.isRequired,
     notifyDisassembleFinish: func.isRequired,
 };
+
+const TWEEN_TIME = 0.5;
+const TWEEN_STAGGER = 0.2;
 
 class GameOver extends Component {
     constructor(props) {
         super(props);
 
         this.gameOver = createRef();
+        this.scoreBoard = createRef();
+        this.homeButton = createRef();
+
         this.tween = null;
-        this.homeButton = null;
     }
 
     componentDidMount() {
-        this.assemble();
+        this.assemble(true);
     }
 
     componentDidUpdate(prevProps) {
@@ -37,12 +43,75 @@ class GameOver extends Component {
         }
     }
 
-    assemble() {
+    componentWillUnmount() {
+        this.killTween();
+    }
 
+    assemble(startOutsideScreen = false) {
+        const { width } = this.props;
+
+        this.killTween();
+
+        const targets = this.getTargets();
+
+        if (startOutsideScreen) {
+            this.tween = TweenMax.staggerFromTo(
+                targets,
+                TWEEN_TIME,
+                {
+                    x: width,
+                },
+                {
+                    x: 0,
+                    ease: Power2.easeOut,
+                },
+                TWEEN_STAGGER,
+            );
+        } else {
+            this.tween = TweenMax.staggerTo(
+                targets,
+                TWEEN_TIME,
+                {
+                    x: 0,
+                    ease: Power2.easeOut,
+                },
+                TWEEN_STAGGER,
+            );
+        }
     }
 
     disassemble() {
+        const { notifyDisassembleFinish, width } = this.props;
 
+        this.killTween();
+
+        const targets = this.getTargets();
+
+        this.tween = TweenMax.staggerTo(
+            targets,
+            TWEEN_TIME,
+            {
+                x: -width,
+                ease: Power2.easeIn,
+            },
+            TWEEN_STAGGER,
+            notifyDisassembleFinish,
+        );
+    }
+
+    getTargets() {
+        return [
+            this.gameOver.current,
+            this.scoreBoard.current,
+            this.homeButton.current,
+        ];
+    }
+
+    killTween() {
+        if (this.tween) {
+            this.tween.forEach(t => t.kill());
+            this.tween = null;
+        }
     }
 
     render() {
@@ -56,7 +125,10 @@ class GameOver extends Component {
                     alt={'Game Over'}
                     ref={this.gameOver}
                 />
-                <div className={styles.scoreBoard}>
+                <div
+                    className={styles.scoreBoard}
+                    ref={this.scoreBoard}
+                >
                     <div className={styles.scoreLine}>
                         <p>Score</p>
                         <p>{score}</p>
@@ -71,12 +143,11 @@ class GameOver extends Component {
                         </p>
                     </div>
                 </div>
-                <div className={styles.buttonContainer}>
-                    <HomeButton
-                        className={styles.home}
-                        to={'/'}
-                        innerRef={r => this.homeButton = r}
-                    />
+                <div
+                    className={styles.buttonContainer}
+                    ref={this.homeButton}
+                >
+                    <HomeButton className={styles.home} to={'/'} />
                 </div>
             </div>
         );

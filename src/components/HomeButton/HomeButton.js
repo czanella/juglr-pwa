@@ -19,34 +19,39 @@ const defaultProps = {
     className: null,
     style: null,
     to: null,
-    innerRef: any,
+    innerRef: null,
 };
 
 function HomeButton({ children, onClick, className, style, to, innerRef }) {
-    const buttonProps = {
-        className: styles.homeButton,
-        onClick: onClick,
-        style: style,
-    };
-    let ButtonClass;
+    const content = (
+        <div className={[styles.content, className].join(' ')}>
+            {children}
+        </div>
+    );
 
     if (to) {
-        ButtonClass = Link;
-        Object.assign(buttonProps, {
-            innerRef,
-            to,
-        });
-    } else {
-        ButtonClass = 'button';
-        buttonProps.ref = innerRef;
+        return (
+            <Link
+                to={to}
+                className={styles.homeButton}
+                onClick={onClick}
+                style={style}
+                innerRef={innerRef}
+            >
+                {content}
+            </Link>
+        );
     }
 
     return (
-        <ButtonClass {...buttonProps}>
-            <div className={[styles.content, className].join(' ')}>
-                {children}
-            </div>
-        </ButtonClass>
+        <button
+            className={styles.homeButton}
+            onClick={onClick}
+            style={style}
+            ref={innerRef}
+        >
+            {content}
+        </button>
     );
 }
 
